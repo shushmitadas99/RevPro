@@ -24,7 +24,10 @@ class CustomerDao:
             with conn.cursor() as cur:
                 cur.execute("INSERT INTO customers (first_name, last_name, mobile_phone, email) VALUES (%s, %s, %s, %s) RETURNING *",
                             (first_name_to_add, last_name_to_add, mobile_phone_to_add, email_to_add))  # Tuple
+
                 inserted_customer_row = cur.fetchone()
+
+                conn.commit()  # commit the transaction in any DML operation
 
                 return Customer(inserted_customer_row[0], inserted_customer_row[1],
                             inserted_customer_row[2], inserted_customer_row[3], inserted_customer_row[4])
@@ -81,3 +84,25 @@ class CustomerDao:
 
                 return Customer(c_id, first_name, last_name, mobile_phone, email)
 
+    # return True if a user was deleted
+    # return False if a user was not deleted
+    def delete_customer_by_id(self, customer_id):
+        with psycopg.connect(
+            host=config['host'],
+            port=config['port'],
+            dbname=config['dbname'],
+            user=config['user'],
+            password=config['password']
+        ) as conn:
+            # Automatically close the cursor
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM customers where id = %s", (customer_id,))  # Tuple with single value
+
+                # Check number of rows that were deleted
+                rows_deleted = cur.rowcount
+
+                if rows_deleted != 1:
+                    return False
+                else:
+                    conn.commit()  # commit the transaction
+                    return True

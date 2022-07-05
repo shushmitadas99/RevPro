@@ -39,3 +39,11 @@ class CustomerService:
             raise CustomerNotFoundError(f"Customer with id {customer_id} was not found")
 
         return customer_obj.to_dict()  # turn it into dictionary
+
+    # If user is deleted successfully, then return None (implicitly)
+    # If user does not exist, raise UserNotFound exception
+    def delete_customer_by_id(self, customer_id):
+        # Execute this block of code if user_dao.delete_user_by_id returns False (which means that we did not delete
+        # any records)
+        if not self.customer_dao.delete_customer_by_id(customer_id):
+            raise CustomerNotFoundError(f"Customer with id {customer_id} was not found")

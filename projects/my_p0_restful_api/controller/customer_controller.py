@@ -77,13 +77,22 @@ def get_customer_by_id(customer_id):
 # @cc.route('/customers/<customer_id>}', methods=['PUT'])
 # def edit_customer_by_id(customer_id):
 #     return "<h1>PUT /customer/{customer_id}</h1>"
-#
-#
-# @cc.route('/customer/<customer_id>}', methods=['DELETE'])
-# def delete_customer_by_id(customer_id):
-#     return "<h1>DELETE /customer/{customer_id}</h1>"
-#
-#
+
+
+@cc.route('/customer/<int:customer_id>', methods=['DELETE'])
+def delete_customer_by_id(customer_id):
+    try:
+        customer_service.delete_customer_by_id(customer_id)  # not a return value since we are not returning anything
+
+        return {
+            "message": f"Customer with id {customer_id} deleted successfully"
+        }
+    except CustomerNotFoundError as e:  # Handles the exception that was raised in user_service layer
+        return {
+            "message": str(e)
+        }, 404
+
+
 # @cc.route('/customer/<customer_id>}', methods=['POST'])
 # def create_customer_account(customer_id):
 #     return "<h1>POST /customer/{customer_id}/accounts</h1>"
