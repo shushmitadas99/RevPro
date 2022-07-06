@@ -111,3 +111,25 @@ class UserDao:
 
                 return User(u_id, username, mobile_phone, active)
 
+    def update_user_by_id(self, user_object):
+        with psycopg.connect(
+                host=config['host'],
+                port=config['port'],
+                dbname=config['dbname'],
+                user=config['user'],
+                password=config['password']
+        ) as conn:
+            # Automatically close the cursor
+            with conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE users SET username = %s, mobile_phone = %s, active_user = %s WHERE id = %s RETURNING *",
+                    (user_object.username, user_object.mobile_phone, user_object.active, user_object.id))
+
+                conn.commit()
+
+                updated_user_row = cur.fetchone()
+                if updated_user_row is None:
+                    return None
+
+                return User(updated_user_row[0], updated_user_row[1], updated_user_row[2], updated_user_row[3])
+

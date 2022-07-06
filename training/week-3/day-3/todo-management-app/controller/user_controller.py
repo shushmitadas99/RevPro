@@ -49,6 +49,21 @@ def delete_user_by_id(user_id):
         }, 404
 
 
+# How is the user data being passed here?
+# We are passing user_id using URI path parameters
+# We are passing rest of the user_object data using request body (username, mobile_phone, active)
+@uc.route('/users/<user_id>', methods=['PUT'])
+def update_user_by_id(user_id):
+    try:
+        json_dictionary = request.get_json()
+        return user_service.update_user_by_id(User(user_id, json_dictionary['username'], json_dictionary['mobile_phone'],
+                                                   json_dictionary['active']))
+    except UserNotFoundError as e:
+        return {
+            "message": str(e)
+        }, 404
+
+
 @uc.route('/users', methods=['POST'])
 def add_user():
     user_json_dictionary = request.get_json()  # need to import request from Flask

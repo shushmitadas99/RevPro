@@ -60,6 +60,14 @@ class UserService:
         added_user_object = self.user_dao.add_user(user_object)
         return added_user_object.to_dict()
 
+    def update_user_by_id(self, user_object):
+        updated_user_object = self.user_dao.update_user_by_id(user_object)
+
+        if updated_user_object is None:
+            raise UserNotFoundError(f"User with id {user_object.id} was not found")
+
+        return updated_user_object.to_dict()
+
     # The basic business logic is done here.
     # However, we have to implement INPUT VALIDATION for project 0
 
