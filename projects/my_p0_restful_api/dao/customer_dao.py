@@ -84,8 +84,34 @@ class CustomerDao:
 
                 return Customer(c_id, first_name, last_name, mobile_phone, email)
 
-    # return True if a user was deleted
-    # return False if a user was not deleted
+    # Pass the customer_object as argument for updating it using PUT method call
+    def update_customer_by_id(self, customer_object):
+        with psycopg.connect(
+                host=config['host'],
+                port=config['port'],
+                dbname=config['dbname'],
+                user=config['user'],
+                password=config['password']
+        ) as conn:
+            # Automatically close the cursor
+            with conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE customers SET first_name = %s, last_name = %s, mobile_phone = %s, email = %s WHERE id = %s RETURNING *",
+                    (customer_object.first_name, customer_object.last_name, customer_object.mobile_phone,
+                     customer_object.email, customer_object.id))
+
+                conn.commit()
+
+                updated_customer_row = cur.fetchone()
+
+                if updated_customer_row is None:
+                    return None
+
+                return Customer(updated_customer_row[0], updated_customer_row[1], updated_customer_row[2],
+                                updated_customer_row[3], updated_customer_row[4])
+
+    # return True if a customer was deleted
+    # return False if a customer was not deleted
     def delete_customer_by_id(self, customer_id):
         with psycopg.connect(
             host=config['host'],

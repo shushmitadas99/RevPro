@@ -37,7 +37,7 @@ def welcome():
          
     '''
 
-
+# POST /customers: Create a new customer
 @cc.route('/customers', methods=['POST'])
 def create_customer():
     customer_json_dictionary = request.get_json()  # need to import request from Flask
@@ -57,6 +57,7 @@ def create_customer():
         }, 400
 
 
+# GET /customers: Gets all customers
 @cc.route('/customers')
 def get_customers():
     return {
@@ -64,6 +65,7 @@ def get_customers():
     }
 
 
+# GET /customer/{customer_id}: Get customer with an id of X (if the customer exists)
 @cc.route('/customer/<int:customer_id>')
 def get_customer_by_id(customer_id):
     try:
@@ -74,11 +76,27 @@ def get_customer_by_id(customer_id):
                }, 404
 
 
-# @cc.route('/customers/<customer_id>}', methods=['PUT'])
-# def edit_customer_by_id(customer_id):
-#     return "<h1>PUT /customer/{customer_id}</h1>"
+# PUT /customer/{customer_id}: Update customer with an id of X (if the customer exists)
+@cc.route('/customer/<int:customer_id>', methods=['PUT'])
+def update_customer_by_id(customer_id):
+    try:
+        json_dictionary = request.get_json()
+        return customer_service.update_customer_by_id(
+            Customer(
+                customer_id,
+                json_dictionary['first_name'],
+                json_dictionary['last_name'],
+                json_dictionary['mobile_phone'],
+                json_dictionary['email']
+            )
+        )
+    except CustomerNotFoundError as e:
+        return {
+            "message": str(e)
+        }, 404
 
 
+# DELETE /customer/{customer_id}: Delete customer with an id of X (if the customer exists)
 @cc.route('/customer/<int:customer_id>', methods=['DELETE'])
 def delete_customer_by_id(customer_id):
     try:
@@ -93,25 +111,32 @@ def delete_customer_by_id(customer_id):
         }, 404
 
 
-# @cc.route('/customer/<customer_id>}', methods=['POST'])
-# def create_customer_account(customer_id):
-#     return "<h1>POST /customer/{customer_id}/accounts</h1>"
+# POST /customer/{customer_id}/accounts
+@cc.route('/customer/<customer_id>}', methods=['POST'])
+def create_customer_account(customer_id):
+    pass
 
 
 # GET /customer/{customer_id}/accounts
 # GET /customer/{customer_id}/accounts?amountLessThan=1000&amountGreaterThan=300
 
 
-# @cc.route('/customer/<customer_id>/account/<account_id>')
-# def get_customer_account_by_id(customer_id, account_id):
-#     return "<h1>GET /customer/{customer_id}/account/{account_id}"
-#
-#
-# @cc.route('/customer/<customer_id>/account/<account_id>', methods=['PUT'])
-# def edit_customer_account_by_id(customer_id, account_id):
-#     return "<h1>PUT /customer/{customer_id}/account/{account_id}"
-#
-#
-# @cc.route('/customer/<customer_id>/account/<account_id>', methods=['DELETE'])
-# def delete_customer_account_by_id(customer_id, account_id):
-#     return "<h1>DELETE /customer/{customer_id}/account/{account_id}"
+# GET /customer/{customer_id}/account/{account_id}: Get account with id of Y belonging to customer with id of X
+# (if customer and account exist AND if account belongs to customer)
+@cc.route('/customer/<customer_id>/account/<account_id>')
+def get_customer_account_by_id(customer_id, account_id):
+    pass
+
+
+# PUT /customer/{customer_id}/account/{account_id}: Update account with id of Y belonging to customer with id of X
+# (if customer and account exist AND if account belongs to customer)
+@cc.route('/customer/<customer_id>/account/<account_id>', methods=['PUT'])
+def edit_customer_account_by_id(customer_id, account_id):
+    pass
+
+
+# DELETE /customer/{customer_id}/account/{account_id}: Delete account with id of Y belonging to customer with id of X
+# (if customer and account exist AND if account belongs to customer)
+@cc.route('/customer/<customer_id>/account/<account_id>', methods=['DELETE'])
+def delete_customer_account_by_id(customer_id, account_id):
+    pass
