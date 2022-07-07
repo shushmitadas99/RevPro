@@ -16,11 +16,7 @@ class AccountService:
 
     # Create a new customers
     def create_account(self, customer_id, account_object):
-        # customer_with_account_id_object = self.account_dao.get_customers_account_by_account_id(customer_id, account_object.id)
-        # if customer_with_account_id_object is None:
-        #     raise AccountDoesNotBelongToCustomerError(
-        #         f"Account {account_object.id} does not belong to customer with id {customer_id}")
-        # CHeck if user actually exists
+
         if self.customer_dao.get_customer_by_id(customer_id) is None:
             raise CustomerNotFoundError(f"Customer with id {customer_id} was not found")
         if account_object.balance < 0:
