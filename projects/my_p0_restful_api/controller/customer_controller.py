@@ -67,7 +67,7 @@ def get_customers():
 
 
 # GET /customer/{customer_id}: Get customer with an id of X (if the customer exists)
-@cc.route('/customer/<customer_id>')
+@cc.route('/customers/<customer_id>')
 def get_customer_by_id(customer_id):
     try:
         return customer_service.get_customer_by_id(customer_id)  # dictionary
@@ -78,7 +78,7 @@ def get_customer_by_id(customer_id):
 
 
 # PUT /customer/{customer_id}: Update customer with an id of X (if the customer exists)
-@cc.route('/customer/<customer_id>', methods=['PUT'])
+@cc.route('/customers/<customer_id>', methods=['PUT'])
 def update_customer_by_id(customer_id):
     try:
         json_dictionary = request.get_json()
@@ -98,7 +98,7 @@ def update_customer_by_id(customer_id):
 
 
 # DELETE /customer/{customer_id}: Delete customer with an id of X (if the customer exists)
-@cc.route('/customer/<customer_id>', methods=['DELETE'])
+@cc.route('/customers/<customer_id>', methods=['DELETE'])
 def delete_customer_by_id(customer_id):
     try:
         customer_service.delete_customer_by_id(customer_id)  # not a return value since we are not returning anything

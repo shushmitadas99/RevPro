@@ -4,6 +4,7 @@ from service.account_service import AccountService
 from service.customer_service import CustomerService
 from exception.customer_not_found import CustomerNotFoundError
 from exception.account_not_found import AccountNotFoundError
+from exception.negative_account_balance import NegativeAccountBalanceError
 from exception.account_does_not_belong_to_customer import AccountDoesNotBelongToCustomerError
 from exception.invalid_parameter import InvalidParameterError
 
@@ -15,23 +16,25 @@ customer_service = CustomerService()
 
 # POST /customer/{customer_id}/accounts
 @ac.route('/customers/<customer_id>/accounts', methods=['POST'])
-def create_customer_account(customer_id):
-    # account_json_dictionary = request.get_json()  # need to import request from Flask
-    # customer_object = Account(  # Dao placeholders: id, first_name, last_name, mobile_phone, email
-    #     None,  # id
-    #     account_json_dictionary['balance'],
-    #     account_json_dictionary['customer_id'],
-    #     account_json_dictionary['account_type_id']
-    # )  # constructor for Account object
-    # try:
-    #     # Dictionary representation of the newly added user
-    #     return customer_service.create_customer(customer_object), 201  # 201 created
-    # except InvalidParameterError as e:
-    #     return {
-    #                "message": str(e)
-    #            }, 400
-
-    pass
+def create_account(customer_id):
+    account_json_dictionary = request.get_json()  # need to import request from Flask
+    account_object = Account(  # Dao placeholders: id, balance, customer_id, account_type_id
+        None,  # id
+        account_json_dictionary['balance'],
+        account_json_dictionary['customer_id'],
+        account_json_dictionary['account_type_id']      ### NEED TO FIX USERNOTFOUNDERROR
+    )  # constructor for Account object
+    try:
+        # Dictionary representation of the newly added user
+        return account_service.create_account(customer_id, account_object), 201  # 201 created
+    except CustomerNotFoundError as e:
+        return {
+                   "message": str(e)
+               }, 404
+    except NegativeAccountBalanceError as e:
+        return {
+                   "message": str(e)
+               }, 400
 
 
 # GET /customer/{customer_id}/accounts: Get all accounts for customer with id of X (if customer exists)
@@ -75,7 +78,20 @@ def get_customer_account_by_account_id(customer_id, account_id):
 # (if customer and account exist AND if account belongs to customer)
 @ac.route('/customers/<customer_id>/accounts/<account_id>', methods=['PUT'])
 def update_customer_account_by_account_id(customer_id, account_id):
-    pass
+    try:
+        json_dictionary = request.get_json()
+        return account_service.update_customer_account_by_account_id(
+            Account(  # Dao placeholders: id, balance, customer_id, account_type_id
+                account_id,  # id
+                json_dictionary['balance'],
+                customer_id,
+                json_dictionary['account_type_id']
+            )  # constructor for Account object
+        )
+    except CustomerNotFoundError as e:
+        return {
+                   "message": str(e)
+               }, 404
 
 
 # DELETE /customer/{customer_id}/account/{account_id}: Delete account with id of Y belonging to customer with id of X
