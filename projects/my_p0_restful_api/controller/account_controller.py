@@ -98,4 +98,13 @@ def update_customer_account_by_account_id(customer_id, account_id):
 # (if customer and account exist AND if account belongs to customer)
 @ac.route('/customers/<customer_id>/accounts/<account_id>', methods=['DELETE'])
 def delete_customer_account_by_account_id(customer_id, account_id):
-    pass
+    try:
+        account_service.delete_customer_account_by_account_id(customer_id, account_id)  # not a return value since we are not returning anything
+
+        return {
+            "message": f"Customer with id {customer_id} deleted successfully"
+        }
+    except CustomerNotFoundError as e:  # Handles the exception that was raised in user_service layer
+        return {
+                   "message": str(e)
+               }, 404

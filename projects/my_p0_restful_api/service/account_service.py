@@ -44,11 +44,18 @@ class AccountService:
 
         return customer_with_account_id_object.to_dict()
 
-    def update_customer_account_by_account_id(self, customer_id, account_id, account_object):
+    def update_customer_account_by_account_id(self, account_object):
         updated_account_object = self.account_dao.update_customer_account_by_account_id(account_object)
+        if not self.customer_dao.get_customer_by_id(account_object.customer_id):
+            raise CustomerNotFoundError(f"Customer with id {account_object.customer_id} was not found")
+        if not self.account_dao.get_account_by_account_id(account_object.id):
+            raise AccountNotFoundError(f"Account with id {account_object.id} was not found")
+
+        return updated_account_object.to_dict()
+
+    def delete_customer_account_by_account_id(self, customer_id, account_id):
         if not self.customer_dao.get_customer_by_id(customer_id):
             raise CustomerNotFoundError(f"Customer with id {customer_id} was not found")
         if not self.account_dao.get_account_by_account_id(account_id):
             raise AccountNotFoundError(f"Account with id {account_id} was not found")
-
-        return updated_account_object.to_dict()
+        return self.account_dao.delete_customer_account_by_account_id(customer_id, account_id)

@@ -100,7 +100,7 @@ class AccountDao:
 
                 return Account(a_id, balance, customer_id, account_type_id)
 
-    def update_customer_account_by_account_id(self, customer_id, account_id, account_object):
+    def update_customer_account_by_account_id(self, account_object):
         with psycopg.connect(
                 host=config['host'],
                 port=config['port'],
@@ -111,8 +111,8 @@ class AccountDao:
             # Automatically close the cursor
             with conn.cursor() as cur:
                 cur.execute(
-                    "UPDATE accounts SET balance = %s, customer_id = %s, account_type_id = %s WHERE customer_id = %s AND id = %s RETURNING *",
-                    (account_object.balance, account_object.customer_id, account_object.account_type_id, customer_id, account_id))
+                    "UPDATE accounts SET balance = %s WHERE customer_id = %s AND account_type_id = %s RETURNING *",
+                    (account_object.balance, account_object.customer_id, account_object.account_type_id))
 
                 conn.commit()
 
@@ -124,3 +124,24 @@ class AccountDao:
                 return Account(updated_account_row[0], updated_account_row[1], updated_account_row[2],
                                 updated_account_row[3])
 
+    def delete_customer_account_by_account_id(self, customer_id, account_id):
+        with psycopg.connect(
+                host=config['host'],
+                port=config['port'],
+                dbname=config['dbname'],
+                user=config['user'],
+                password=config['password']
+        ) as conn:
+            # Automatically close the cursor
+            with conn.cursor() as cur:
+                cur.execute(
+                    "DELETE FROM accounts where customer_id = %s AND id = %s", (customer_id, account_id))
+
+                # Check number of rows that were deleted
+                rows_deleted = cur.rowcount
+
+                if rows_deleted != 1:
+                    return False
+                else:
+                    conn.commit()  # commit the transaction
+                    return True

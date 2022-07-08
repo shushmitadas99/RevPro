@@ -46,7 +46,7 @@ VALUES
 (2000, 1, 2),
 (125000, 2, 2);
 
--- SQL queries to display tables
+-- SQL queries to display tables -> Execute each separately
 SELECT * 
 FROM customers
 
@@ -55,6 +55,8 @@ FROM accounts
 
 SELECT * 
 FROM account_type
+
+SELECT * FROM accounts WHERE customer_id = 9;
 
 SELECT customers.id, customers.first_name, customers.last_name, accounts.balance, accounts.account_type_id
 FROM customers
