@@ -49,16 +49,16 @@ VALUES
 -- SQL queries to display tables -> Execute each separately
 SELECT * 
 FROM customers
+ORDER BY id ASC;
 
 SELECT * 
 FROM accounts
+ORDER BY customer_id, account_type_id ASC;
 
 SELECT * 
 FROM account_type
 
-SELECT * FROM accounts WHERE customer_id = 9;
-
 SELECT customers.id, customers.first_name, customers.last_name, accounts.balance, accounts.account_type_id
 FROM customers
 LEFT JOIN accounts ON customers.id = accounts.customer_id
-ORDER BY customers.last_name;
+ORDER BY customers.id ASC;

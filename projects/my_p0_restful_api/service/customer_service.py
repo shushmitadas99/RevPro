@@ -50,7 +50,7 @@ class CustomerService:
         if updated_customer_object is None:
             raise CustomerNotFoundError(f"Customer with id {customer_object.id} was not found")
 
-        return updated_customer_object.to_dict()
+        return updated_customer_object.to_dict()  # dictionary
 
     # If user is deleted successfully, then return None (implicitly)
     # If user does not exist, raise UserNotFound exception

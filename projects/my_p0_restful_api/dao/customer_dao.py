@@ -43,7 +43,7 @@ class CustomerDao:
         ) as conn:
             # Automatically close the cursor
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM customers")
+                cur.execute("SELECT * FROM customers ORDER BY customers.id ASC")
 
                 my_list_of_user_objs = []
                 # iterate over each row of the "users" table

@@ -15,7 +15,7 @@ customer_service = CustomerService()
 def welcome():
     return '''
     
-    WELCOME TO BANK OF CANADA
+    WELCOME TO RESTFUL API SIMULATING BANK DATABASE OPERATIONS
     
     Please enter the following HTTP requests to perform specific operations:
     
@@ -55,7 +55,7 @@ def create_customer():
     except InvalidParameterError as e:
         return {
             "message": str(e)
-        }, 400
+        }, 400  # Bad request
 
 
 # GET /customers: Gets all customers
@@ -74,7 +74,7 @@ def get_customer_by_id(customer_id):
     except CustomerNotFoundError as e:
         return {
                    "message": str(e)
-               }, 404
+               }, 404  # Not found
 
 
 # PUT /customer/{customer_id}: Update customer with an id of X (if the customer exists)

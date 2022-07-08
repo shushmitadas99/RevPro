@@ -7,7 +7,7 @@ config = dotenv_values(".env")  # is a dict
 
 class AccountDao:
 
-    def create_account(self, customer_id, account_object):  # user will represent a User object
+    def create_account(self, account_object):  # user will represent a User object
         balance_to_add = account_object.balance
         customer_id_to_add = account_object.customer_id
         account_type_id_to_add = account_object.account_type_id
@@ -45,7 +45,7 @@ class AccountDao:
         ) as conn:
             # Automatically close the cursor
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM accounts WHERE customer_id = %s", (customer_id,))
+                cur.execute("SELECT * FROM accounts WHERE customer_id = %s ORDER BY accounts.id ASC", (customer_id,))
 
                 account_list = []
 

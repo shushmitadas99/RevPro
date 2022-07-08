@@ -6,7 +6,6 @@ from exception.customer_not_found import CustomerNotFoundError
 from exception.account_not_found import AccountNotFoundError
 from exception.negative_account_balance import NegativeAccountBalanceError
 from exception.account_does_not_belong_to_customer import AccountDoesNotBelongToCustomerError
-from exception.invalid_parameter import InvalidParameterError
 
 ac = Blueprint('todo_controller', __name__)
 
@@ -21,8 +20,8 @@ def create_account(customer_id):
     account_object = Account(  # Dao placeholders: id, balance, customer_id, account_type_id
         None,  # id
         account_json_dictionary['balance'],
-        account_json_dictionary['customer_id'],
-        account_json_dictionary['account_type_id']      ### NEED TO FIX USERNOTFOUNDERROR
+        customer_id,
+        account_json_dictionary['account_type_id']
     )  # constructor for Account object
     try:
         # Dictionary representation of the newly added user
@@ -92,6 +91,10 @@ def update_customer_account_by_account_id(customer_id, account_id):
         return {
                    "message": str(e)
                }, 404
+    except AccountNotFoundError as e:
+        return {
+                   "message": str(e)
+               }, 404
 
 
 # DELETE /customer/{customer_id}/account/{account_id}: Delete account with id of Y belonging to customer with id of X
@@ -102,9 +105,13 @@ def delete_customer_account_by_account_id(customer_id, account_id):
         account_service.delete_customer_account_by_account_id(customer_id, account_id)  # not a return value since we are not returning anything
 
         return {
-            "message": f"Customer with id {customer_id} deleted successfully"
+            "message": f"Account with id {account_id} belonging to customer with id {customer_id} deleted successfully"
         }
     except CustomerNotFoundError as e:  # Handles the exception that was raised in user_service layer
+        return {
+                   "message": str(e)
+               }, 404
+    except AccountNotFoundError as e:  # Handles the exception that was raised in user_service layer
         return {
                    "message": str(e)
                }, 404
