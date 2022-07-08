@@ -58,6 +58,8 @@ ORDER BY customer_id, account_type_id ASC;
 SELECT * 
 FROM account_type
 
+
+
 SELECT customers.id, customers.first_name, customers.last_name, accounts.balance, accounts.account_type_id
 FROM customers
 LEFT JOIN accounts ON customers.id = accounts.customer_id

@@ -105,7 +105,7 @@ def delete_customer_account_by_account_id(customer_id, account_id):
         account_service.delete_customer_account_by_account_id(customer_id, account_id)  # not a return value since we are not returning anything
 
         return {
-            "message": f"Account with id {account_id} belonging to customer with id {customer_id} deleted successfully"
+            "message": f"Account with id {account_id} belonging to customer with id {customer_id} was deleted successfully"
         }
     except CustomerNotFoundError as e:  # Handles the exception that was raised in user_service layer
         return {
