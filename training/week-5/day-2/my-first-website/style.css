@@ -1,0 +1,81 @@
+/**selector priority -> most - least
+(5) Declarations marked with !important -> generally stay away from this
+(4) Inline style (style attribute) -> generally stay away from this
+(3) ID Selector
+(2) Class Selector
+(1) Element Selector
+(0) Universal Selector
+
+Order actually matters if you have two different selectors at the same level of priority
+for an element -> the latest one declared gets applied to it
+
+There are some properties which are inherited from higher prioritiy selectors:
+Usually related to font styling. For example: the universal selector below applying the
+font-size property to it's child elements*/
+
+* {
+    font-size: 16px;
+}
+
+.html-info {
+    color: green;
+    font-family: sans-serif
+}
+
+.introduction {
+    color: orange;
+}
+
+h2 {
+    color: red;
+}
+
+#fruit-unordered-list {
+    color: rgb(16, 141, 208);
+}
+
+#fruit-ordered-list {
+    color:rgb(59, 153, 86)
+}
+
+tbody tr {
+    color: pink;
+}
+
+thead tr {
+    color: purple;
+}
+
+.what-is-html {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: rgb(139, 137, 200);
+    height: 500px;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+}
+
+#my-id-1 {
+    border: 5px solid black;
+    background-color: green;
+    color: black;
+}
+
+#my-id-2 {
+    border: 5px dashed black;
+}
+
+#links {
+    margin: 40px;
+}
+
+/* Descendant selector: Select a tags that are descendants of an element with an id of links */
+#links a {
+    margin-left: 10px;
+    margin-right: 10px;
+}
