@@ -19,7 +19,7 @@ CREATE TABLE ers_users (
 
 INSERT INTO ers_users (username, password, first_name, last_name, user_role, email)
 VALUES 
-('Shushmita97', crypt('ukygkgKYUGgugfog', gen_salt('bf')), 'Shushmita','Das', 'finance_manager', 'shushmita99@github.com'),
+('Shushmita97', 'passWRD234', 'Shushmita','Das', 'finance_manager', 'shushmita99@github.com'),
 ('Quinton98', crypt('bhgHGHJGghjkg', gen_salt('bf')), 'Quinton', 'Lott', 'finance_manager', 'quinton56@fibonacci.com'),
 ('Carol88', crypt('ggFJHVYYVYU', gen_salt('bf')), 'Carol', 'Danvers', 'employee', 'abc578f@randommail.com'),
 ('John', crypt('igukgUFYUKVyukguy', gen_salt('bf')), 'John', 'Danvers', 'employee', 'abcdefgh@revature.com');

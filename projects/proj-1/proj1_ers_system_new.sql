@@ -1,6 +1,8 @@
+--Drop tables if exists
 DROP TABLE IF EXISTS ers_reimbursements;
 DROP TABLE IF EXISTS ers_users;
 
+--ers_users table
 CREATE TABLE ers_users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(20) UNIQUE NOT NULL,
@@ -12,13 +14,14 @@ CREATE TABLE ers_users (
 
 INSERT INTO ers_users (username, password, first_name, last_name, user_role, email)
 VALUES 
-('Shushmita97', crypt('ukygkgKYUGgugfog', gen_salt('bf')), 'Shushmita','Das', 'finance_manager', 'shushmita99@github.com'),
-('Quinton98', crypt('bhgHGHJGghjkg', gen_salt('bf')), 'Quinton', 'Lott', 'finance_manager', 'quinton56@fibonacci.com'),
-('Carol88', crypt('ggFJHVYYVYU', gen_salt('bf')), 'Carol', 'Danvers', 'employee', 'abc578f@randommail.com'),
-('John', crypt('igukgUFYUKVyukguy', gen_salt('bf')), 'John', 'Danvers', 'employee', 'abcdefgh@revature.com');
+('Shushmita97', 'passWRD234', 'Shushmita','Das', 'finance_manager', 'shushmita99@github.com'),
+('Siju78', 'passWRD234', 'Siju', 'Abraham', 'finance_manager', 'siju789@fibonacci.com'),
+('Carol88', 'passWRD234', 'Carol', 'Danvers', 'employee', 'abc578f@randommail.com'),
+('John11', 'passWRD234', 'John', 'Doe', 'employee', 'abcdefgh@revature.com'),
+('MiraJ007', 'passWRD234', 'Mira', 'Jane', 'employee', 'abcdefghi@disneywrld.com'),
+('Ben22', 'passWRD234', 'Ben', 'Doe', 'employee', 'abcdefghj@disneywrld.com');
 
-
---drop table if exists
+--ers_reimbursements table
 CREATE TABLE ers_reimbursements (
     reimb_id SERIAL PRIMARY KEY,
     reimb_author VARCHAR(20) NOT NULL,
@@ -34,26 +37,26 @@ CREATE TABLE ers_reimbursements (
     CONSTRAINT fk_ers_users_reimb FOREIGN KEY (reimb_resolver) REFERENCES ers_users(username)
 );
 
---status VARCHAR(15) CHECK (status in ('pending', 'approved', 'denied')) DEFAULT 'pending',
---reimb_type VARCHAR NOT NULL CHECK (reimb_type in ('Lodging','Travel', 'Food', 'Other')),
-
--- finance_manager => update reimbursement status 
---UPDATE reimbursements
---SET status = 'approved', resolved = CURRENT_TIMESTAMP
---WHERE reimb_id = 1;
-
-
-insert into ers_reimbursements (reimb_author, reimbursement_amount, reimb_type, description) 
-values('Shushmita97', 1678, 'Lodging', 'This is lodging');
 insert into ers_reimbursements (reimb_author, reimbursement_amount, reimb_type, description) 
 values('Carol88', 3444, 'Travel', 'This is travelling');
---insert into ers_reimbursements (reimb_author, reimb_resolver, reimbursement_amount, status, reimb_type, description) values(3, 1, 2000, 'pending', 'travel', 'This is travel');
---insert into ers_reimbursements (reimb_author, reimb_resolver, reimbursement_amount, status, reimb_type, description) values(3, 1, 1000, 'pending', 'food', 'This is food');
---insert into ers_reimbursements (reimb_author, reimbursement_amount, submitted, status, reimb_type, description)
---values(1, 1000, CURRENT_TIMESTAMP, 'pending', 'food', 'This is food expense');
---insert into ers_reimbursements (reimb_author, reimbursement_amount, submitted, status, reimb_type, description) "
---                    "values(1, 3000, CURRENT_TIMESTAMP, 'pending', 'travel', 'This is travel expense') WHERE ers_reimbursements.reimb_author == ers_users.username reimb_author IN (SELECT username FROM ers_users) RETURNING *);
-                    
+insert into ers_reimbursements (reimb_author, reimbursement_amount, reimb_type, description) 
+values('John11', 1678, 'Lodging', 'This is lodging');
+insert into ers_reimbursements (reimb_author, reimbursement_amount, reimb_type, description) 
+values('Carol88', 200, 'Food', 'This is foodie');
+insert into ers_reimbursements (reimb_author, reimbursement_amount, reimb_type, description) 
+values('MiraJ007', 500, 'Food', 'Went with classic calamari');
+insert into ers_reimbursements (reimb_author, reimbursement_amount, reimb_type, description) 
+values('Ben22', 1200, 'Lodging', 'This is loging for Ben');
+insert into ers_reimbursements (reimb_author, reimbursement_amount, reimb_type, description) 
+values('Ben22', 1200, 'Lodging', 'Had to move due to placement');
+insert into ers_reimbursements (reimb_author, reimbursement_amount, reimb_type, description) 
+values('Carol88', 200, 'Lodging', 'Temporarily staying in Houston for renovations');
+
+-- SQL Queries
+UPDATE ers_reimbursements
+SET status = 'approved', resolved = current_timestamp, reimb_resolver = 'Siju78'
+WHERE reimb_id = '4'
+
 SELECT * FROM ers_users;
 SELECT * FROM ers_reimbursements;
 
@@ -62,6 +65,7 @@ WHERE reimb_author = 'Carol88';
 
 SELECT * FROM ers_reimbursements WHERE reimb_author = 'Shushmita97' ORDER BY reimb_id ASC;
 
+-- Comprehensive Select Query
 SELECT ers_users.username, ers_users.first_name, ers_users.last_name, ers_reimbursements.reimb_author, 
 ers_reimbursements.reimb_resolver, ers_reimbursements.reimbursement_amount, ers_reimbursements.submitted, 
 ers_reimbursements.resolved, ers_reimbursements.status, ers_reimbursements.reimb_type, 
@@ -70,3 +74,5 @@ FROM ers_users
 LEFT JOIN ers_reimbursements ON ers_users.username = ers_reimbursements.reimb_author
 GROUP BY ers_users.username
 ORDER BY ers_reimbursements.reimb_id ASC;
+
+CREATE DATABASE proj3_revmo;

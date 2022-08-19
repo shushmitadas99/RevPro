@@ -1,5 +1,9 @@
-.idea
+.idea/
 venv
+venv/
 .env
 _pycache_
 __pycache__
+out/
+.vscode
+.vscode/
